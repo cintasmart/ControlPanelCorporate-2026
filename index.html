@@ -940,7 +940,11 @@
         }
 
         window.initCloud = async function() {
-            if (!isPlatformEnv) { 
+            // PERBAIKAN: Selalu paksa menggunakan myFirebaseConfig jika API Key sudah Anda isi.
+            // Abaikan isPlatformEnv jika Anda sudah mengisi API Key asli.
+            const hasRealApiKey = typeof myFirebaseConfig.apiKey === 'string' && myFirebaseConfig.apiKey.length > 20 && !myFirebaseConfig.apiKey.includes('ISI_API_KEY');
+            
+            if (!isPlatformEnv && !hasRealApiKey) { 
                 window.showToast("Mode Lokal (Data tersimpan di Browser)", "amber"); 
                 const localData = localStorage.getItem('reny_dashboard_data');
                 if (localData) {
@@ -950,7 +954,15 @@
                 window.renderAll(); 
                 return; 
             }
+            
             try {
+                // Jika tidak jalan di mode platform, tapi user punya API key, inisialisasi Firebase secara manual
+                if (!app && hasRealApiKey) {
+                    app = initializeApp(myFirebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                }
+
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { 
                     await signInWithCustomToken(auth, __initial_auth_token); 
                 } else { 
@@ -976,7 +988,8 @@
                         window.showToast("Data Tersinkronisasi Real-time!", "emerald");
                     }, (error) => {
                         console.error("onSnapshot error:", error);
-                        window.showToast("Koneksi Database Terputus", "red");
+                        // Tampilkan pesan error detail dari Firebase agar kita tahu penyebabnya
+                        window.showToast(`Error Database: ${error.code || 'Terputus'}`, "red");
                     });
 
                     window.initVisitorTracking();
@@ -986,7 +999,8 @@
                 }
             } catch(e) { 
                 console.error("initCloud error:", e); 
-                window.showToast("Gagal terkoneksi Cloud", "red"); 
+                // Tampilkan pesan error detail dari Firebase agar kita tahu penyebabnya
+                window.showToast(`Error Cloud: ${e.code || 'Koneksi Gagal'}`, "red"); 
             }
         };
 
