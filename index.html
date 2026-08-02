@@ -182,7 +182,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
             <div class="glass p-4 md:p-5 rounded-2xl border-t-2 border-sky-500 relative overflow-hidden bg-gray-900/40">
-                <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i class="fas fa-history text-sky-500"></i> Vs Bulan Lalu (MoM)</p>
+                <p id="har-title-mom" class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i class="fas fa-history text-sky-500"></i> Vs Bulan Lalu (MoM)</p>
                 <div class="flex justify-between items-center border-b border-gray-700/50 pb-2 mb-2">
                     <div>
                         <p class="text-[10px] text-gray-500 font-bold uppercase">Omset</p>
@@ -206,7 +206,7 @@
             </div>
             
             <div class="glass p-4 md:p-5 rounded-2xl border-t-2 border-purple-500 relative overflow-hidden bg-gray-900/40">
-                <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)</p>
+                <p id="har-title-yoy" class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)</p>
                 <div class="flex justify-between items-center border-b border-gray-700/50 pb-2 mb-2">
                     <div>
                         <p class="text-[10px] text-gray-500 font-bold uppercase">Omset</p>
@@ -1631,31 +1631,18 @@
                 aH[sItem.dept].outlets[kS_dept] = { stock: sItem.stock, lastDate: sItem.tanggal };
             });
 
-            // Historical Comparisons
+            // Historical Comparisons (Apple-to-Apple)
+            let maxTgl = aD.length > 0 ? Math.max(...aD) : 31;
+            let appleLabel = maxTgl < 31 ? ` (s/d Tgl ${maxTgl})` : '';
             let pM = bF === 1 ? 12 : bF - 1; let pY = bF === 1 ? tF - 1 : tF; let pTY = tF - 1;
             
-            let dL = window.data.filter(d => (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === pM && d.tahun === pY);
-            let dTL = window.data.filter(d => (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === bF && d.tahun === pTY);
+            let dL = window.data.filter(d => d.tanggal > 0 && d.tanggal <= maxTgl && (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === pM && d.tahun === pY);
+            let dTL = window.data.filter(d => d.tanggal > 0 && d.tanggal <= maxTgl && (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === bF && d.tahun === pTY);
 
-            let dbL = 0, dbPL = 0, dbTL = 0, dbPTL = 0;
-            // Fetch from Master (tanggal 0) first, else fallback to sum of dailies
-            let dLMasters = dL.filter(d => d.tanggal === 0);
-            if(dLMasters.length > 0) { 
-                dbL = dLMasters.reduce((sum, d) => sum + (d.omset||0), 0); 
-                dbPL = dLMasters.reduce((sum, d) => sum + (d.profit||0), 0); 
-            } else { 
-                dbL = dL.reduce((sum, d) => sum + (d.omset||0), 0); 
-                dbPL = dL.reduce((sum, d) => sum + (d.profit||0), 0); 
-            }
-            
-            let dTLMasters = dTL.filter(d => d.tanggal === 0);
-            if(dTLMasters.length > 0) { 
-                dbTL = dTLMasters.reduce((sum, d) => sum + (d.omset||0), 0); 
-                dbPTL = dTLMasters.reduce((sum, d) => sum + (d.profit||0), 0); 
-            } else { 
-                dbTL = dTL.reduce((sum, d) => sum + (d.omset||0), 0); 
-                dbPTL = dTL.reduce((sum, d) => sum + (d.profit||0), 0); 
-            }
+            let dbL = dL.reduce((sum, d) => sum + (d.omset||0), 0); 
+            let dbPL = dL.reduce((sum, d) => sum + (d.profit||0), 0); 
+            let dbTL = dTL.reduce((sum, d) => sum + (d.omset||0), 0); 
+            let dbPTL = dTL.reduce((sum, d) => sum + (d.profit||0), 0); 
 
             let mPct = dbL > 0 ? (((tO - dbL)/dbL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); let mpPct = dbPL > 0 ? (((tP - dbPL)/dbPL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
             let yPct = dbTL > 0 ? (((tO - dbTL)/dbTL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); let ypPct = dbPTL > 0 ? (((tP - dbPTL)/dbPTL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
@@ -1664,6 +1651,9 @@
             let jH = aD.length > 0 ? aD.length : 1; let rHH = tHpp / jH; let dsi = rHH > 0 ? (totSt / rHH).toFixed(2) : '0.00';
 
             // Top Dashboard Widgets Update
+            if (document.getElementById('har-title-mom')) document.getElementById('har-title-mom').innerHTML = `<i class="fas fa-history text-sky-500"></i> Vs Bulan Lalu${appleLabel}`;
+            if (document.getElementById('har-title-yoy')) document.getElementById('har-title-yoy').innerHTML = `<i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu${appleLabel}`;
+            
             document.getElementById('har-tot-omset').innerText = `Rp ${Math.round(tO).toLocaleString()}`; document.getElementById('har-tgt-omset').innerText = `Target: Rp ${Math.round(tT).toLocaleString()}`;
             const pO = tT > 0 ? ((tO/tT)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); document.getElementById('har-bar-omset').style.width = `${parseFloat(pO) > 100 ? 100 : pO}%`; document.getElementById('har-pct-omset').innerText = `${pO}%`;
             document.getElementById('har-tot-profit').innerText = `Rp ${Math.round(tP).toLocaleString()}`; document.getElementById('har-tgt-profit').innerText = `Target: Rp ${Math.round(tTP).toLocaleString()}`;
@@ -1952,6 +1942,57 @@
                 }
             }
 
+            // APPLE-TO-APPLE LOGIC FOR DIREKTORI COMPARISONS
+            let isCurrentHasMaster = fD_raw.some(d => d.tanggal === 0);
+            let maxCurrentTgl = 31;
+            if (!isCurrentHasMaster) {
+                let currentDailies = fD_raw.filter(d => d.tanggal > 0);
+                if (currentDailies.length > 0) maxCurrentTgl = Math.max(...currentDailies.map(d => d.tanggal));
+            }
+            let appleLabelDir = (!isCurrentHasMaster && maxCurrentTgl < 31) ? ` (s/d Tgl ${maxCurrentTgl})` : '';
+
+            function aggregatePastAppleToApple(pastRawQuery) {
+                if (isCurrentHasMaster) return pastRawQuery;
+                
+                let forceDailiesQuery = [];
+                if (pastRawQuery === pPD) {
+                    if (bF === "") { 
+                        forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && d.tahun === tFN - 1 && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
+                    } else { 
+                        let bFA = bF.split(',').map(Number);
+                        if (bFA.length === 1) { 
+                            let m = bFA[0]; let pM = m === 1 ? 12 : m - 1; let pY = m === 1 ? tFN - 1 : tFN; 
+                            forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && parseInt(d.bulan) === pM && d.tahun === pY && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
+                        } else {
+                            forceDailiesQuery = pastRawQuery; 
+                        }
+                    }
+                } else if (pastRawQuery === pYD) {
+                    let bFA = bF !== "" ? bF.split(',').map(Number) : [1,2,3,4,5,6,7,8,9,10,11,12];
+                    forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && bFA.includes(parseInt(d.bulan)) && d.tahun === tFN - 1 && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
+                }
+
+                if (forceDailiesQuery.length === 0) return pastRawQuery; 
+
+                let groups = {};
+                forceDailiesQuery.forEach(d => {
+                    let k = `${d.outlet}_${d.dept}_${d.bulan}_${d.tahun}`;
+                    if (!groups[k]) groups[k] = [];
+                    groups[k].push(d);
+                });
+                
+                let result = [];
+                Object.values(groups).forEach(dailies => {
+                    let combined = { ...dailies[0], target: 0, tProfit: 0, tPembelian: 0, omset: 0, profit: 0, pembelian: 0 };
+                    dailies.forEach(dx => { combined.target+=dx.target||0; combined.omset+=dx.omset||0; combined.tProfit+=dx.tProfit||0; combined.profit+=dx.profit||0; combined.tPembelian+=dx.tPembelian||0; combined.pembelian+=dx.pembelian||0; });
+                    result.push(combined);
+                });
+                return result;
+            }
+
+            pPD = aggregatePastAppleToApple(pPD);
+            pYD = aggregatePastAppleToApple(pYD);
+
             let qDt = { 1:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 2:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 3:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 4:{to:0,o:0,tp:0,p:0,tpem:0,pem:0} };
             let sDt = { 1:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 2:{to:0,o:0,tp:0,p:0,tpem:0,pem:0} };
             let yTO = 0, yTP = 0;
@@ -2031,17 +2072,25 @@
                 if (sOTL > 0) py1 = isPj ? sOTL : (sOTL - sOPTL);
                 if (sOPTL > 0) py2 = isPj ? sOPTL : pYPm;
                 
-                let activeDays = new Set(); let hasT0 = false; let months = new Set();
-                fD.forEach(d => { if(d.tanggal > 0) activeDays.add(`${d.tahun}-${d.bulan}-${d.tanggal}`); else hasT0 = true; months.add(`${d.tahun}-${d.bulan}`); });
-                let dTD = 0; 
-                if (activeDays.size > 0) { dTD = activeDays.size; } 
-                else if (hasT0) { months.forEach(ym => { let [y, m] = ym.split('-'); dTD += new Date(parseInt(y), parseInt(m), 0).getDate(); }); }
-                if (dTD === 0) dTD = 1;
+                let totalDays = 0;
+                let monthGroups = {};
+                fD_raw.forEach(d => {
+                    let mk = `${d.tahun}-${d.bulan}`;
+                    if (!monthGroups[mk]) monthGroups[mk] = { hasMaster: false, maxDay: 0 };
+                    if (d.tanggal === 0) monthGroups[mk].hasMaster = true;
+                    if (d.tanggal > monthGroups[mk].maxDay) monthGroups[mk].maxDay = d.tanggal;
+                });
+                Object.keys(monthGroups).forEach(mk => {
+                    let [y, m] = mk.split('-').map(Number);
+                    if (monthGroups[mk].hasMaster) totalDays += new Date(y, m, 0).getDate();
+                    else totalDays += monthGroups[mk].maxDay || 1;
+                });
+                let dTD = totalDays > 0 ? totalDays : 1;
 
                 let dRH = tHpp / dTD; let dDsi = dRH > 0 ? (dTS / dRH).toFixed(2) : '0.00';
 
-                let cH = `<div class="glass p-5 rounded-2xl border-t-4 border-sky-500 bg-gray-900/50 shadow-xl ${sSB ? '' : 'md:col-span-2 lg:col-span-1'}"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-history text-sky-500"></i> Vs ${pL}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, pr1, pr1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, pr2, pr2>0)}</div></div></div>`;
-                if (sSB) { cH += `<div class="glass p-5 rounded-2xl border-t-4 border-purple-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, py1, py1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, py2, py2>0)}</div></div></div>`; }
+                let cH = `<div class="glass p-5 rounded-2xl border-t-4 border-sky-500 bg-gray-900/50 shadow-xl ${sSB ? '' : 'md:col-span-2 lg:col-span-1'}"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-history text-sky-500"></i> Vs ${pL}${appleLabelDir}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, pr1, pr1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, pr2, pr2>0)}</div></div></div>`;
+                if (sSB) { cH += `<div class="glass p-5 rounded-2xl border-t-4 border-purple-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)${appleLabelDir}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, py1, py1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, py2, py2>0)}</div></div></div>`; }
                 cH += `<div class="glass p-5 rounded-2xl border-t-4 border-teal-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2" title="Days Sales of Inventory (DSI)"><i class="fas fa-boxes text-teal-500"></i> Umur Perputaran</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1">Total Stok</p><p class="text-sm text-gray-300 font-bold">Rp ${Math.round(dTS).toLocaleString()}</p></div><div class="text-right flex items-center gap-2"><h3 class="text-2xl font-black text-teal-400 leading-none">${dDsi} Hr</h3></div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1">HPP Periode</p><p class="text-xs text-gray-500 font-semibold">Rp ${Math.round(tHpp).toLocaleString()}</p></div><div class="text-right flex items-center gap-2"><p class="text-sm font-bold text-gray-400">${dTD} Hari</p></div></div></div>`;
                 cC.innerHTML = cH;
             }
@@ -2197,8 +2246,14 @@
                         const sDB = `<span class="ml-2 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-gray-700/80 text-gray-300 border border-gray-600">${window.getDivisi(d.originalDept)}</span>`;
                         let dPR = pR.filter(r => r.dept === d.originalDept); 
                         
-                        let dActD = new Set(); let dHT0 = false; dPR.forEach(r => { if(r.tanggal > 0) dActD.add(r.tanggal); else dHT0 = true; });
-                        let dAD = dActD.size > 0 ? dActD.size : (dHT0 ? fDIM : 1);
+                        let rawDeptData = fD_raw.filter(r => r.dept === d.originalDept && r.bulan === i);
+                        let dHasMaster = rawDeptData.some(r => r.tanggal === 0);
+                        let dMaxTgl = 1;
+                        if (!dHasMaster) {
+                            let dDailies = rawDeptData.filter(r => r.tanggal > 0);
+                            if (dDailies.length > 0) dMaxTgl = Math.max(...dDailies.map(x => x.tanggal));
+                        }
+                        let dAD = dHasMaster ? new Date(tFN, i, 0).getDate() : dMaxTgl;
                         
                         let dHp = d.omset - d.profit; let dRH = dHp / dAD; let dDsi = dRH > 0 ? (d.cS / dRH).toFixed(2) : '0.00';
                         
