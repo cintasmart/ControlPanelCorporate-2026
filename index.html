@@ -906,8 +906,28 @@
         window.AgungHash = "QWd1bmdnYW50ZW5n";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'corporate-dashboard-app';
+        
+        // =====================================================================
+        // 🔴 PENTING: KONFIGURASI FIREBASE UNTUK GITHUB PAGES 🔴
+        // =====================================================================
+        // Agar data tersimpan di Cloud saat di-hosting di GitHub Pages, Anda perlu
+        // mengganti nilai di bawah ini dengan konfigurasi Firebase milik Anda sendiri.
+        // Jika tidak diisi, sistem otomatis menggunakan Mode Lokal (Local Storage Browser).
+        let myFirebaseConfig = {
+            apiKey: "AIzaSyCWo8ftrfrRscnFddG9Puihs3oyL7DU1JU",
+            authDomain: "controlpanel2026-5d475.firebaseapp.com",
+            projectId: "controlpanel2026-5d475",
+            storageBucket: "controlpanel2026-5d475.firebasestorage.app",
+            messagingSenderId: "185570087634",
+            appId: "1:185570087634:web:88d3deba8a6c3230ca930b"
+        };
+
         let firebaseConfig = { apiKey: "dummy" };
-        if (typeof __firebase_config !== 'undefined') { try { firebaseConfig = JSON.parse(__firebase_config); } catch(e) {} }
+        if (typeof __firebase_config !== 'undefined') { 
+            try { firebaseConfig = JSON.parse(__firebase_config); } catch(e) {} 
+        } else if (myFirebaseConfig.apiKey !== "ISI_API_KEY_ANDA_DISINI") {
+            firebaseConfig = myFirebaseConfig;
+        }
 
         const isPlatformEnv = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'dummy';
         let app, auth, db;
@@ -921,7 +941,12 @@
 
         window.initCloud = async function() {
             if (!isPlatformEnv) { 
-                window.showToast("Menjalankan secara offline lokal", "amber"); 
+                window.showToast("Mode Lokal (Data tersimpan di Browser)", "amber"); 
+                const localData = localStorage.getItem('reny_dashboard_data');
+                if (localData) {
+                    try { window.data = JSON.parse(localData); } catch(e) { window.data = []; }
+                }
+                window.updateDbDeptFilter();
                 window.renderAll(); 
                 return; 
             }
@@ -1232,7 +1257,8 @@
                 if (exIdx > -1) { item.id = window.data[exIdx].id; window.data[exIdx] = item; } else { window.data.push(item); }
             }
             
-            if (typeof window.syncToCloud === 'function') await window.syncToCloud([item]);
+            if (typeof window.syncToCloud === 'function' && isPlatformEnv) { await window.syncToCloud([item]); }
+            else { localStorage.setItem('reny_dashboard_data', JSON.stringify(window.data)); }
             
             window.showToast("Data Tersimpan!", "emerald"); window.resetForm(); window.updateDbDeptFilter(); window.renderAll();
         };
@@ -1241,14 +1267,16 @@
             try {
                 if(!idVal) return; const ids = JSON.parse(idVal); 
                 window.data = window.data.filter(d => !ids.includes(String(d.id)));
-                if (typeof window.deleteFromCloud === 'function') await window.deleteFromCloud(ids);
+                if (typeof window.deleteFromCloud === 'function' && isPlatformEnv) { await window.deleteFromCloud(ids); }
+                else { localStorage.setItem('reny_dashboard_data', JSON.stringify(window.data)); }
                 window.showToast(`${ids.length} Data dihapus`, "amber"); window.updateDbDeptFilter(); window.renderAll(); document.getElementById('btn-request-bulk-delete')?.classList.add('hidden');
             } catch(e) { console.error(e); }
         };
 
         window.processReset = async function() {
             window.data = []; 
-            if (typeof window.resetCloud === 'function') await window.resetCloud();
+            if (typeof window.resetCloud === 'function' && isPlatformEnv) { await window.resetCloud(); }
+            else { localStorage.removeItem('reny_dashboard_data'); }
             window.showToast("Database Dikosongkan!", "red"); window.updateDbDeptFilter(); window.renderAll();
         };
 
@@ -1404,7 +1432,8 @@
                                     const fin = async () => {
                                         document.getElementById('import-status-text').innerText = "Sync Cloud..."; document.getElementById('import-progress-bar').style.width = "85%"; document.getElementById('import-progress-pct').innerText = "85%";
                                         await new Promise(r => setTimeout(r, 100));
-                                        if (typeof window.syncToCloud === 'function') { await window.syncToCloud(Array.from(importedItemsMap.values())); }
+                                        if (typeof window.syncToCloud === 'function' && isPlatformEnv) { await window.syncToCloud(Array.from(importedItemsMap.values())); }
+                                        else { localStorage.setItem('reny_dashboard_data', JSON.stringify(window.data)); }
                                         document.getElementById('import-status-text').innerText = "Memperbarui Visual..."; document.getElementById('import-progress-bar').style.width = "95%"; document.getElementById('import-progress-pct').innerText = "95%";
                                         await new Promise(r => setTimeout(r, 100));
                                         window.updateDbDeptFilter(); window.renderAll(); window.isProcessingCloud = false; 
