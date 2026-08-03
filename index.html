@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corporate Control Panel 2026 - Daily & Monthly</title>
+    <title>Corporate Indeks - Daily & Monthly</title>
     
     <!-- Favicon Logo Perusahaan -->
-<link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/11.3.0/highcharts.js"></script>
@@ -63,7 +64,7 @@
 <body class="min-h-screen p-4 md:p-6 lg:p-8">
     <header class="text-center w-full max-w-5xl mx-auto relative z-10 mb-10 mt-4">
         <h3 class="font-heading text-amber-200 text-sm md:text-base uppercase tracking-[0.3em] font-black mb-2 flex items-center justify-center gap-2">
-            Report Kinerja 
+            Report Kinerja 1.8.8
             <button id="btn-session-lock" class="w-6 h-6 rounded-full flex items-center justify-center transition-all shadow-[0_0_8px_#10b981] bg-emerald-500 text-white cursor-pointer hover:scale-110" title="Sesi Terkunci - Klik untuk Login">
                 <i class="fas fa-lock text-[10px]"></i>
             </button>
@@ -142,21 +143,27 @@
             <div class="glass p-5 rounded-2xl border-t-2 border-cyan-500 relative overflow-hidden">
                 <p class="text-gray-400 text-sm font-semibold uppercase tracking-wider">Kinerja Omset</p>
                 <h3 id="har-tot-omset" class="text-3xl font-bold text-white mt-2 mb-1">Rp 0</h3>
-                <p id="har-tgt-omset" class="text-xs text-gray-400 mb-4">Target: Rp 0</p>
+                <div class="flex flex-col gap-1.5 mb-3">
+                    <p id="har-tgt-omset" class="text-xs text-cyan-200 font-bold bg-cyan-900/40 px-2.5 py-1 rounded w-fit border border-cyan-500/30">🎯 Target Harian: Rp 0</p>
+                    <p id="har-tgt-omset-bulan" class="text-xs text-amber-200 font-bold bg-amber-900/40 px-2.5 py-1 rounded w-fit border border-amber-500/30">📅 Target Bulanan: Rp 0</p>
+                </div>
                 <div class="w-full bg-gray-800 rounded-full h-2 mb-1">
                     <div id="har-bar-omset" class="bg-cyan-500 h-2 rounded-full progress-bar shadow-[0_0_10px_rgba(6,182,212,0.8)]" style="width: 0%"></div>
                 </div>
-                <div class="flex justify-between text-xs font-bold"><span class="text-gray-500">% Capai</span><span id="har-pct-omset" class="text-cyan-400">0.00%</span></div>
+                <div class="flex justify-between text-xs font-bold mt-1.5"><span class="text-gray-500">% Capai Harian</span><span id="har-pct-omset" class="text-cyan-400">0.00%</span></div>
             </div>
 
             <div class="glass p-5 rounded-2xl border-t-2 border-emerald-500 relative overflow-hidden">
                 <p class="text-gray-400 text-sm font-semibold uppercase tracking-wider">Kinerja Profit</p>
                 <h3 id="har-tot-profit" class="text-3xl font-bold text-white mt-2 mb-1">Rp 0</h3>
-                <p id="har-tgt-profit" class="text-xs text-gray-400 mb-4">Target: Rp 0</p>
+                <div class="flex flex-col gap-1.5 mb-3">
+                    <p id="har-tgt-profit" class="text-xs text-emerald-200 font-bold bg-emerald-900/40 px-2.5 py-1 rounded w-fit border border-emerald-500/30">🎯 Target Harian: Rp 0</p>
+                    <p id="har-tgt-profit-bulan" class="text-xs text-amber-200 font-bold bg-amber-900/40 px-2.5 py-1 rounded w-fit border border-amber-500/30">📅 Target Bulanan: Rp 0</p>
+                </div>
                 <div class="w-full bg-gray-800 rounded-full h-2 mb-1">
                     <div id="har-bar-profit" class="bg-emerald-500 h-2 rounded-full progress-bar shadow-[0_0_10px_rgba(16,185,129,0.8)]" style="width: 0%"></div>
                 </div>
-                <div class="flex justify-between text-xs font-bold"><span class="text-gray-500">% Capai</span><span id="har-pct-profit" class="text-emerald-400">0.00%</span></div>
+                <div class="flex justify-between text-xs font-bold mt-1.5"><span class="text-gray-500">% Capai Harian</span><span id="har-pct-profit" class="text-emerald-400">0.00%</span></div>
             </div>
 
             <div class="glass p-5 rounded-2xl border-t-2 border-indigo-500 relative flex flex-col justify-center overflow-hidden">
@@ -261,18 +268,26 @@
                 </div>
                 <div class="flex justify-between items-center mb-1">
                     <div>
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Beli</p>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Beli (Harian)</p>
                     </div>
                     <div class="text-right">
                         <h3 id="har-tot-pembelian" class="text-lg font-bold text-amber-400 leading-none">Rp 0</h3>
                     </div>
                 </div>
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center mb-1">
                     <div>
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Limit (HPP)</p>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Limit Harian</p>
                     </div>
                     <div class="text-right">
-                        <h3 id="har-tot-hpp" class="text-lg font-bold text-orange-400 leading-none">Rp 0</h3>
+                        <h3 id="har-tot-hpp" class="text-sm font-bold text-orange-400 leading-none">Rp 0</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center border-t border-gray-700/50 pt-2 mt-1">
+                    <div>
+                        <p class="text-[10px] text-amber-200 font-bold uppercase"><i class="fas fa-calendar-alt"></i> Limit Bulanan</p>
+                    </div>
+                    <div class="text-right">
+                        <p id="har-tot-hpp-bulan" class="text-xs font-bold text-amber-300 leading-none">Rp 0</p>
                     </div>
                 </div>
                 <div class="w-full bg-gray-800 rounded-full h-1.5 mt-2.5">
@@ -1199,6 +1214,51 @@
             const elAM = document.getElementById('display-in-amargin'); if(elAM) elAM.innerText = ao>0 ? ((ap/ao)*100).toFixed(2)+'%' : '0.00%';
         };
 
+        window.autoFetchHistoricalData = function() {
+            if (document.getElementById('editingId').value !== '') return; // Jangan jalankan jika sedang edit data lama
+            
+            const out = document.getElementById('in-outlet').value;
+            const dRaw = document.getElementById('in-dept').value;
+            let dept = (dRaw === 'manual') ? document.getElementById('in-dept-manual').value.trim() : (dRaw ? dRaw.trim() : "");
+            
+            if(!out || !dept) return;
+
+            const tInp = document.getElementById('in-tanggal').value;
+            let tgl = 0, bln = 1, thn = new Date().getFullYear();
+            if (tInp) { 
+                const d = new Date(tInp); 
+                tgl = d.getDate(); bln = d.getMonth() + 1; thn = d.getFullYear(); 
+            } else { 
+                bln = parseInt(document.getElementById('in-bulan').value)||1; 
+                thn = parseInt(document.getElementById('in-tahun').value)||thn; 
+            }
+
+            let pmBln = bln === 1 ? 12 : bln - 1; let pmThn = bln === 1 ? thn - 1 : thn;
+            let pyBln = bln; let pyThn = thn - 1;
+
+            // Cari data di memori / Cloud
+            let dL = window.data.find(d => window.isOutletMatch(d.outlet, out) && d.dept === dept && d.tanggal === tgl && d.bulan === pmBln && d.tahun === pmThn);
+            let dTL = window.data.find(d => window.isOutletMatch(d.outlet, out) && d.dept === dept && d.tanggal === tgl && d.bulan === pyBln && d.tahun === pyThn);
+
+            let hasF = false;
+            
+            if (dL) {
+                const eO = document.getElementById('in-omset-lalu'); const eP = document.getElementById('in-profit-lalu');
+                if (eO && dL.omset !== undefined && eO.value === '') { eO.value = dL.omset; eO.classList.add('shadow-[0_0_15px_rgba(56,189,248,0.5)]'); setTimeout(() => eO.classList.remove('shadow-[0_0_15px_rgba(56,189,248,0.5)]'), 2500); }
+                if (eP && dL.profit !== undefined && eP.value === '') { eP.value = dL.profit; eP.classList.add('shadow-[0_0_15px_rgba(52,211,153,0.5)]'); setTimeout(() => eP.classList.remove('shadow-[0_0_15px_rgba(52,211,153,0.5)]'), 2500); }
+                hasF = true;
+            }
+            
+            if (dTL) {
+                const eOT = document.getElementById('in-omset-tahun-lalu'); const ePT = document.getElementById('in-profit-tahun-lalu');
+                if (eOT && dTL.omset !== undefined && eOT.value === '') { eOT.value = dTL.omset; eOT.classList.add('shadow-[0_0_15px_rgba(192,132,252,0.5)]'); setTimeout(() => eOT.classList.remove('shadow-[0_0_15px_rgba(192,132,252,0.5)]'), 2500); }
+                if (ePT && dTL.profit !== undefined && ePT.value === '') { ePT.value = dTL.profit; ePT.classList.add('shadow-[0_0_15px_rgba(232,121,249,0.5)]'); setTimeout(() => ePT.classList.remove('shadow-[0_0_15px_rgba(232,121,249,0.5)]'), 2500); }
+                hasF = true;
+            }
+            
+            if (hasF) window.showToast("Data historis ditarik otomatis!", "blue");
+        };
+
         window.executeEdit = function(id) {
             const item = window.data.find(d => String(d.id) === String(id)); if(!item) return;
             document.getElementById('in-outlet').value = item.outlet || 'RN01 (Bratang)';
@@ -1554,6 +1614,10 @@
             
             ['in-target', 'in-target-profit', 'in-omset', 'in-profit'].forEach(id => document.getElementById(id)?.addEventListener('input', window.calculateAutoParams));
 
+            // TAMBAHAN LISTENER UNTUK TRIGGER AUTO-FETCH HISTORIS
+            ['in-outlet', 'in-dept', 'in-tanggal', 'in-bulan', 'in-tahun'].forEach(id => document.getElementById(id)?.addEventListener('change', window.autoFetchHistoricalData));
+            document.getElementById('in-dept-manual')?.addEventListener('blur', window.autoFetchHistoricalData);
+
             document.getElementById('btn-save')?.addEventListener('click', window.saveData); document.getElementById('btn-cancel')?.addEventListener('click', window.resetForm);
             document.getElementById('btn-view-penjualan')?.addEventListener('click', () => { window.currentTableMode = 'penjualan'; window.updateToggleUI(); window.renderDirektori(); });
             document.getElementById('btn-view-beban')?.addEventListener('click', () => { window.currentTableMode = 'beban'; window.updateToggleUI(); window.renderDirektori(); });
@@ -1623,7 +1687,7 @@
             const bF = parseInt(document.getElementById('harFilterBulan')?.value) || new Date().getMonth() + 1; 
             const tF = parseInt(document.getElementById('harFilterTahun')?.value) || new Date().getFullYear();
 
-            // STRICTLY FILTER DAILIES ONLY (tanggal > 0) FOR HARIAN DASHBOARD
+            // FETCH DAILIES
             let dD = window.data.filter(d => 
                 (oF === "" || window.isOutletMatch(d.outlet, oF)) && 
                 (dF === "" || d.dept === dF) && 
@@ -1633,10 +1697,35 @@
                 d.tanggal > 0
             ).sort((a,b) => a.tanggal - b.tanggal);
 
-            let tT = 0, tTP = 0, tTPem = 0;
+            // FETCH MASTER DATA (tanggal === 0) FOR MONTHLY TARGETS
+            let masterData = window.data.filter(d => 
+                (oF === "" || window.isOutletMatch(d.outlet, oF)) && 
+                (dF === "" || d.dept === dF) && 
+                (divF === "" || window.getDivisi(d.dept) === divF) &&
+                d.bulan === bF && 
+                d.tahun === tF &&
+                d.tanggal === 0
+            );
+
             let tO = 0, tP = 0, tPem = 0; 
             let aD = []; let lSM = {}; let oLT = -1; let aH = {};
             
+            let mTargetDeptMap = {};
+            let mTargetOmset = 0, mTargetProfit = 0, mTargetPembelian = 0;
+
+            // 1. Build Master Target Map
+            masterData.forEach(m => {
+                mTargetOmset += (m.target || 0);
+                mTargetProfit += (m.tProfit || 0);
+                mTargetPembelian += (m.tPembelian || 0);
+                
+                if (!mTargetDeptMap[m.dept]) mTargetDeptMap[m.dept] = { target: 0, tProfit: 0, tPembelian: 0 };
+                mTargetDeptMap[m.dept].target += (m.target || 0);
+                mTargetDeptMap[m.dept].tProfit += (m.tProfit || 0);
+                mTargetDeptMap[m.dept].tPembelian += (m.tPembelian || 0);
+            });
+
+            // 2. Fetch Stock
             let monthStockData = window.data.filter(d => 
                 (oF === "" || window.isOutletMatch(d.outlet, oF)) && 
                 (dF === "" || d.dept === dF) && 
@@ -1654,55 +1743,92 @@
                 }
             });
 
+            // 3. Aggregate Actual Dailies
             dD.forEach(d => {
-                tT += (d.target || 0); tTP += (d.tProfit || 0); tTPem += (d.tPembelian || 0);
                 tO += (d.omset || 0); tP += (d.profit || 0); tPem += (d.pembelian || 0);
                 
                 if (!aD.includes(d.tanggal)) aD.push(d.tanggal);
 
-                if (!aH[d.dept]) aH[d.dept] = { dept: d.dept, target: 0, omset: 0, tProfit: 0, profit: 0, tPem: 0, pem: 0, outlets: {}, links: [] };
-                aH[d.dept].target += (d.target || 0); aH[d.dept].tProfit += (d.tProfit || 0); aH[d.dept].tPem += (d.tPembelian || 0);
+                if (!aH[d.dept]) aH[d.dept] = { dept: d.dept, omset: 0, profit: 0, pem: 0, outlets: {}, links: [] };
                 aH[d.dept].omset += (d.omset || 0); aH[d.dept].profit += (d.profit || 0); aH[d.dept].pem += (d.pembelian || 0);
 
                 if (d.url && d.url.trim() !== "" && !aH[d.dept].links.find(l => l.url === d.url.trim())) aH[d.dept].links.push({ url: d.url.trim(), label: d.outlet });
             });
 
-            // Populate stock into aH from lSM so department cards in Harian have accurate stock
+            // If no master data exists, fallback to sum of daily targets (legacy support)
+            if (masterData.length === 0) {
+                 dD.forEach(m => {
+                    mTargetOmset += (m.target || 0);
+                    mTargetProfit += (m.tProfit || 0);
+                    mTargetPembelian += (m.tPembelian || 0);
+                    
+                    if (!mTargetDeptMap[m.dept]) mTargetDeptMap[m.dept] = { target: 0, tProfit: 0, tPembelian: 0 };
+                    mTargetDeptMap[m.dept].target += (m.target || 0);
+                    mTargetDeptMap[m.dept].tProfit += (m.tProfit || 0);
+                    mTargetDeptMap[m.dept].tPembelian += (m.tPembelian || 0);
+                 });
+            }
+
+            // 4. SMART TARGET CALCULATION (Pro-Rata)
+            let maxTgl = aD.length > 0 ? Math.max(...aD) : 0;
+            // Jika tidak ada data harian, fallback ke tanggal hari ini jika bulan ini, atau akhir bulan jika bulan lalu
+            if (maxTgl === 0) {
+                let now = new Date();
+                if (now.getMonth() + 1 === bF && now.getFullYear() === tF) maxTgl = now.getDate();
+                else maxTgl = new Date(tF, bF, 0).getDate(); 
+            }
+            
+            let daysInMonth = new Date(tF, bF, 0).getDate();
+            
+            // Calculate Global Pro-Rata Targets
+            let tT = (mTargetOmset / daysInMonth) * maxTgl;
+            let tTP = (mTargetProfit / daysInMonth) * maxTgl;
+            let tTPem = (mTargetPembelian / daysInMonth) * maxTgl;
+
+            // Populate stock into aH
             Object.values(lSM).forEach(sItem => {
                 if (!aH[sItem.dept]) {
-                    aH[sItem.dept] = { dept: sItem.dept, target: 0, omset: 0, tProfit: 0, profit: 0, tPem: 0, pem: 0, outlets: {}, links: [] };
+                    aH[sItem.dept] = { dept: sItem.dept, omset: 0, profit: 0, pem: 0, outlets: {}, links: [] };
                 }
                 let kS_dept = sItem.outlet || 'default';
                 aH[sItem.dept].outlets[kS_dept] = { stock: sItem.stock, lastDate: sItem.tanggal };
             });
 
-            // Historical Comparisons (Apple-to-Apple)
-            let maxTgl = aD.length > 0 ? Math.max(...aD) : 31;
-            let appleLabel = maxTgl < 31 ? ` (s/d Tgl ${maxTgl})` : '';
+            // Historical Comparisons
             let pM = bF === 1 ? 12 : bF - 1; let pY = bF === 1 ? tF - 1 : tF; let pTY = tF - 1;
+            let appleLabel = maxTgl < daysInMonth ? ` (s/d Tgl ${maxTgl})` : '';
             
-            let dL = window.data.filter(d => d.tanggal > 0 && d.tanggal <= maxTgl && (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === pM && d.tahun === pY);
-            let dTL = window.data.filter(d => d.tanggal > 0 && d.tanggal <= maxTgl && (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === bF && d.tahun === pTY);
+            // Filter Historis secara Apple-to-Apple
+            let dL = window.data.filter(d => (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === pM && d.tahun === pY && d.tanggal > 0 && d.tanggal <= maxTgl);
+            let dTL = window.data.filter(d => (oF === "" || window.isOutletMatch(d.outlet, oF)) && (dF === "" || d.dept === dF) && (divF === "" || window.getDivisi(d.dept) === divF) && d.bulan === bF && d.tahun === pTY && d.tanggal > 0 && d.tanggal <= maxTgl);
 
-            let dbL = dL.reduce((sum, d) => sum + (d.omset||0), 0); 
-            let dbPL = dL.reduce((sum, d) => sum + (d.profit||0), 0); 
-            let dbTL = dTL.reduce((sum, d) => sum + (d.omset||0), 0); 
-            let dbPTL = dTL.reduce((sum, d) => sum + (d.profit||0), 0); 
+            let dbL = dL.reduce((sum, d) => sum + (d.omset||0), 0);
+            let dbPL = dL.reduce((sum, d) => sum + (d.profit||0), 0);
+            let dbTL = dTL.reduce((sum, d) => sum + (d.omset||0), 0);
+            let dbPTL = dTL.reduce((sum, d) => sum + (d.profit||0), 0);
 
-            let mPct = dbL > 0 ? (((tO - dbL)/dbL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); let mpPct = dbPL > 0 ? (((tP - dbPL)/dbPL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
-            let yPct = dbTL > 0 ? (((tO - dbTL)/dbTL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); let ypPct = dbPTL > 0 ? (((tP - dbPTL)/dbPTL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
+            let mPct = dbL > 0 ? (((tO - dbL)/dbL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00');
+            let mpPct = dbPL > 0 ? (((tP - dbPL)/dbPL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
+            let yPct = dbTL > 0 ? (((tO - dbTL)/dbTL)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00');
+            let ypPct = dbPTL > 0 ? (((tP - dbPTL)/dbPTL)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00');
 
-            let totSt = Object.values(lSM).reduce((s, i) => s + i.stock, 0); let tHpp = tO - tP; 
+            let totSt = Object.values(lSM).reduce((s, i) => s + (i.stock || 0), 0);
+            let tHpp = tO - tP; 
             let jH = aD.length > 0 ? aD.length : 1; let rHH = tHpp / jH; let dsi = rHH > 0 ? (totSt / rHH).toFixed(2) : '0.00';
 
             // Top Dashboard Widgets Update
-            if (document.getElementById('har-title-mom')) document.getElementById('har-title-mom').innerHTML = `<i class="fas fa-history text-sky-500"></i> Vs Bulan Lalu${appleLabel}`;
-            if (document.getElementById('har-title-yoy')) document.getElementById('har-title-yoy').innerHTML = `<i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu${appleLabel}`;
+            document.getElementById('har-tot-omset').innerText = `Rp ${Math.round(tO).toLocaleString()}`; 
+            document.getElementById('har-tgt-omset').innerHTML = `🎯 Target (s/d Tgl ${maxTgl}): Rp ${Math.round(tT).toLocaleString()}`;
+            if (document.getElementById('har-tgt-omset-bulan')) document.getElementById('har-tgt-omset-bulan').innerHTML = `📅 Target Bulanan: Rp ${Math.round(mTargetOmset).toLocaleString()}`;
             
-            document.getElementById('har-tot-omset').innerText = `Rp ${Math.round(tO).toLocaleString()}`; document.getElementById('har-tgt-omset').innerText = `Target: Rp ${Math.round(tT).toLocaleString()}`;
             const pO = tT > 0 ? ((tO/tT)*100).toFixed(2) : (tO > 0 ? '100.00' : '0.00'); document.getElementById('har-bar-omset').style.width = `${parseFloat(pO) > 100 ? 100 : pO}%`; document.getElementById('har-pct-omset').innerText = `${pO}%`;
-            document.getElementById('har-tot-profit').innerText = `Rp ${Math.round(tP).toLocaleString()}`; document.getElementById('har-tgt-profit').innerText = `Target: Rp ${Math.round(tTP).toLocaleString()}`;
+            
+            document.getElementById('har-tot-profit').innerText = `Rp ${Math.round(tP).toLocaleString()}`; 
+            document.getElementById('har-tgt-profit').innerHTML = `🎯 Target (s/d Tgl ${maxTgl}): Rp ${Math.round(tTP).toLocaleString()}`;
+            if (document.getElementById('har-tgt-profit-bulan')) document.getElementById('har-tgt-profit-bulan').innerHTML = `📅 Target Bulanan: Rp ${Math.round(mTargetProfit).toLocaleString()}`;
+            
             const pP = tTP > 0 ? ((tP/tTP)*100).toFixed(2) : (tP > 0 ? '100.00' : '0.00'); document.getElementById('har-bar-profit').style.width = `${parseFloat(pP) > 100 ? 100 : pP}%`; document.getElementById('har-pct-profit').innerText = `${pP}%`;
+            
             document.getElementById('har-tgt-margin').innerText = tT > 0 ? ((tTP / tT)*100).toFixed(2) + '%' : '0.00%'; document.getElementById('har-akt-margin').innerText = tO > 0 ? ((tP / tO)*100).toFixed(2) + '%' : '0.00%';
             document.getElementById('har-last-stock').innerText = `Rp ${Math.round(totSt).toLocaleString()}`; document.getElementById('har-last-stock-date').innerText = oLT > 0 ? `${oLT} ${window.bln[bF-1]}` : '-';
             if (document.getElementById('har-total-stock')) document.getElementById('har-total-stock').innerText = Math.round(totSt).toLocaleString();
@@ -1711,8 +1837,15 @@
             let pB = tHpp > 0 ? ((tPem / tHpp) * 100).toFixed(2) : (tPem > 0 ? '100.00' : '0.00');
             if (document.getElementById('har-tot-pembelian')) document.getElementById('har-tot-pembelian').innerText = `Rp ${Math.round(tPem).toLocaleString()}`;
             if (document.getElementById('har-tot-hpp')) document.getElementById('har-tot-hpp').innerText = `Rp ${Math.round(tHpp).toLocaleString()}`;
+            if (document.getElementById('har-tot-hpp-bulan')) {
+                let mLimitHpp = mTargetOmset - mTargetProfit;
+                document.getElementById('har-tot-hpp-bulan').innerText = `Rp ${Math.round(mLimitHpp).toLocaleString()}`;
+            }
             if (document.getElementById('har-bar-pembelian')) { document.getElementById('har-bar-pembelian').style.width = `${parseFloat(pB) > 100 ? 100 : pB}%`; document.getElementById('har-bar-pembelian').className = parseFloat(pB) > 100 ? 'bg-rose-500 h-2.5 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.8)]' : 'bg-emerald-500 h-2.5 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)]'; }
             if (document.getElementById('har-beli-status')) { let eS = document.getElementById('har-beli-status'); if (parseFloat(pB) > 100) { eS.innerText = `Over ${pB}%`; eS.className = "text-xs px-2 py-1 rounded font-bold bg-rose-900/40 text-rose-400 border border-rose-500/30"; } else { eS.innerText = `${pB}% (Aman)`; eS.className = "text-xs px-2 py-1 rounded font-bold bg-emerald-900/40 text-emerald-400 border border-emerald-500/30"; } }
+
+            let titleMom = document.getElementById('har-title-mom'); if (titleMom) titleMom.innerHTML = `<i class="fas fa-history text-sky-500"></i> Vs Bulan Lalu ${appleLabel}`;
+            let titleYoy = document.getElementById('har-title-yoy'); if (titleYoy) titleYoy.innerHTML = `<i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu ${appleLabel}`;
 
             document.getElementById('har-omset-lalu').innerText = Math.round(dbL).toLocaleString(); document.getElementById('har-mom-pct').innerText = `${parseFloat(mPct) > 0 ? '+'+mPct : mPct}%`; document.getElementById('har-mom-pct').className = parseFloat(mPct) >= 0 ? "text-xl font-bold text-sky-400 leading-none" : "text-xl font-bold text-rose-400 leading-none"; document.getElementById('har-mom-diff').innerText = `Diff: Rp ${Math.round(tO - dbL).toLocaleString()}`;
             document.getElementById('har-profit-lalu').innerText = Math.round(dbPL).toLocaleString(); document.getElementById('har-mom-profit-pct').innerText = `${parseFloat(mpPct) > 0 ? '+'+mpPct : mpPct}%`; document.getElementById('har-mom-profit-pct').className = parseFloat(mpPct) >= 0 ? "text-xl font-bold text-emerald-400 leading-none" : "text-xl font-bold text-rose-400 leading-none"; document.getElementById('har-mom-profit-diff').innerText = `Diff: Rp ${Math.round(tP - dbPL).toLocaleString()}`;
@@ -1731,9 +1864,19 @@
                     sortedDepts.forEach(d => {
                         let lH = window.renderDynamicLinks(d.links, 'emerald');
                         
-                        let dTargetOmset = d.target; let dAktualOmset = d.omset;
-                        let dTargetProfit = d.tProfit; let dAktualProfit = d.profit;
-                        let dPembelian = d.pem; let dLimitHpp = dAktualOmset - dAktualProfit; 
+                        let dMonthlyTargetOmset = mTargetDeptMap[d.dept] ? mTargetDeptMap[d.dept].target : 0;
+                        let dMonthlyTargetProfit = mTargetDeptMap[d.dept] ? mTargetDeptMap[d.dept].tProfit : 0;
+                        let dMonthlyLimitHpp = dMonthlyTargetOmset - dMonthlyTargetProfit;
+
+                        // Calculate Dept Pro-Rata Targets
+                        let dTargetOmset = (dMonthlyTargetOmset / daysInMonth) * maxTgl; 
+                        let dTargetProfit = (dMonthlyTargetProfit / daysInMonth) * maxTgl;
+                        
+                        let dAktualOmset = d.omset || 0;
+                        let dAktualProfit = d.profit || 0;
+                        let dPembelian = d.pem || 0; 
+                        let dLimitHpp = dAktualOmset - dAktualProfit; 
+                        
                         let dTargetMargin = dTargetOmset > 0 ? ((dTargetProfit / dTargetOmset) * 100).toFixed(2) : 0;
                         let dAktualMargin = dAktualOmset > 0 ? ((dAktualProfit / dAktualOmset) * 100).toFixed(2) : 0;
                         let dStock = Object.values(d.outlets || {}).reduce((sum, o) => sum + (o.stock || 0), 0);
@@ -1751,7 +1894,74 @@
                         let bdgOmset = parseFloat(pctOmset) >= 100 ? 'text-emerald-400 bg-emerald-900/40 border-emerald-500/50' : (parseFloat(pctOmset) >= 95 ? 'text-amber-400 bg-amber-900/40 border-amber-500/50' : 'text-rose-400 bg-rose-900/40 border-rose-500/50');
                         let bdgProfit = parseFloat(pctProfit) >= 100 ? 'text-emerald-400 bg-emerald-900/40 border-emerald-500/50' : (parseFloat(pctProfit) >= 95 ? 'text-amber-400 bg-amber-900/40 border-amber-500/50' : 'text-rose-400 bg-rose-900/40 border-rose-500/50');
 
-                        cardsHTML += `<div class="glass p-5 rounded-2xl border-t-4 border-emerald-500/50 flex flex-col h-full hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow"><div class="flex justify-between items-start mb-3 border-b border-gray-700/80 pb-3"><div><h4 class="font-bold text-white text-lg flex items-center gap-2"><i class="fas fa-folder text-emerald-500"></i> ${d.dept}</h4><p class="text-[10px] uppercase font-bold text-gray-500 mt-1">${window.getDivisi(d.dept)}</p></div><div class="flex flex-col items-end gap-1.5"><div class="px-2.5 py-1 rounded-md border border-fuchsia-500/50 bg-fuchsia-900/40 text-fuchsia-400 font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]" title="Kontribusi thd Total Hari Ini"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Kontribusi</span><span>${kntrOmset}%</span></div><div class="px-2.5 py-1 rounded-md border ${bdgOmset} font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Omset</span><span>${pctOmset}%</span></div><div class="px-2.5 py-1 rounded-md border ${bdgProfit} font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Profit</span><span>${pctProfit}%</span></div></div></div>${lH !== '' ? `<div class="mb-4">${lH}</div>` : ''}<div class="grid grid-cols-2 gap-3 mb-4"><div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50"><p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Omset (vs Target)</p><p class="text-sm ${omsetColor} font-bold break-words">Rp ${Math.round(dAktualOmset).toLocaleString()}</p><p class="text-[10px] text-gray-500 font-semibold mt-1">T: Rp ${Math.round(dTargetOmset).toLocaleString()}</p></div><div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50"><p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Profit (vs Target)</p><p class="text-sm ${profitColor} font-bold break-words">Rp ${Math.round(dAktualProfit).toLocaleString()}</p><p class="text-[10px] text-gray-500 font-semibold mt-1">T: Rp ${Math.round(dTargetProfit).toLocaleString()}</p></div></div><div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50 mb-4 flex justify-between items-center"><div><p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Margin Aktual</p><p class="text-lg ${marginColor} font-black">${dAktualMargin}%</p></div><div class="text-right"><p class="text-[10px] text-gray-500 uppercase font-bold mb-1">Target Margin</p><p class="text-sm text-gray-300 font-bold">${dTargetMargin}%</p></div></div><div class="mt-auto grid grid-cols-2 gap-3 border-t border-gray-700/50 pt-3"><div><p class="text-[10px] text-gray-400 uppercase font-bold mb-1" title="Pembelian / Limit HPP">Beli / Limit</p><p class="text-sm ${beliColor} font-bold break-words">Rp ${Math.round(dPembelian).toLocaleString()}</p><p class="text-[9px] text-gray-500 font-bold mt-1">L: Rp ${Math.round(dLimitHpp).toLocaleString()} <span class="${beliColor}">(${pctBeli}%)</span></p></div><div class="text-right border-l border-gray-700/50 pl-3"><p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Stok Aktual</p><p class="text-sm text-fuchsia-400 font-bold break-words">Rp ${Math.round(dStock).toLocaleString()}</p><p class="text-[9px] text-gray-500 font-bold mt-1">Sesuai Inputan</p></div></div></div>`;
+                        cardsHTML += `<div class="glass p-5 rounded-2xl border-t-4 border-emerald-500/50 flex flex-col h-full hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="font-bold text-white text-lg flex items-center gap-2"><i class="fas fa-folder text-emerald-500"></i> ${d.dept}</h4>
+                                    <p class="text-[10px] uppercase font-bold text-gray-500 mt-1">${window.getDivisi(d.dept)}</p>
+                                </div>
+                                <div class="flex flex-col items-end gap-1.5">
+                                    <div class="px-2.5 py-1 rounded-md border border-fuchsia-500/50 bg-fuchsia-900/40 text-fuchsia-400 font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]" title="Kontribusi thd Total Hari Ini"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Kontribusi</span><span>${kntrOmset}%</span></div>
+                                    <div class="px-2.5 py-1 rounded-md border ${bdgOmset} font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Omset</span><span>${pctOmset}%</span></div>
+                                    <div class="px-2.5 py-1 rounded-md border ${bdgProfit} font-black text-sm shadow-sm flex items-center justify-between min-w-[95px]"><span class="text-[9px] uppercase opacity-80 mr-2 text-white">Profit</span><span>${pctProfit}%</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2 mb-3 border-b border-gray-700/80 pb-3">
+                                <div class="bg-gray-800/80 border border-cyan-500/30 rounded px-2.5 py-1.5 shadow-inner">
+                                    <p class="text-[9px] text-gray-400 uppercase font-bold mb-0.5">Tgt Omset Bulanan</p>
+                                    <p class="text-xs text-cyan-300 font-black">Rp ${Math.round(dMonthlyTargetOmset).toLocaleString()}</p>
+                                </div>
+                                <div class="bg-gray-800/80 border border-emerald-500/30 rounded px-2.5 py-1.5 shadow-inner">
+                                    <p class="text-[9px] text-gray-400 uppercase font-bold mb-0.5">Tgt Profit Bulanan</p>
+                                    <p class="text-xs text-emerald-300 font-black">Rp ${Math.round(dMonthlyTargetProfit).toLocaleString()}</p>
+                                </div>
+                            </div>
+                            
+                            ${lH !== '' ? `<div class="mb-3">${lH}</div>` : ''}
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Omset Aktual Harian</p>
+                                    <p class="text-sm ${omsetColor} font-bold break-words mb-2">Rp ${Math.round(dAktualOmset).toLocaleString()}</p>
+                                    <div class="flex flex-col gap-1 border-t border-gray-700/50 pt-1.5">
+                                        <p class="text-[10px] text-cyan-200/70 font-bold flex justify-between" title="Target s/d Tgl ${maxTgl}"><span>Tgt (Tgl ${maxTgl}):</span> <span>Rp ${Math.round(dTargetOmset).toLocaleString()}</span></p>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Profit Aktual Harian</p>
+                                    <p class="text-sm ${profitColor} font-bold break-words mb-2">Rp ${Math.round(dAktualProfit).toLocaleString()}</p>
+                                    <div class="flex flex-col gap-1 border-t border-gray-700/50 pt-1.5">
+                                        <p class="text-[10px] text-emerald-200/70 font-bold flex justify-between" title="Target s/d Tgl ${maxTgl}"><span>Tgt (Tgl ${maxTgl}):</span> <span>Rp ${Math.round(dTargetProfit).toLocaleString()}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-700/50 mb-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Margin Aktual</p>
+                                    <p class="text-lg ${marginColor} font-black">${dAktualMargin}%</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-gray-500 uppercase font-bold mb-1">Target Margin</p>
+                                    <p class="text-sm text-gray-300 font-bold">${dTargetMargin}%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-auto grid grid-cols-2 gap-3 border-t border-gray-700/50 pt-3">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" title="Pembelian / Limit HPP">Beli / Limit</p>
+                                    <p class="text-sm ${beliColor} font-bold break-words mb-1">Rp ${Math.round(dPembelian).toLocaleString()}</p>
+                                    <p class="text-[9px] text-gray-500 font-bold mb-1">L.Hari: Rp ${Math.round(dLimitHpp).toLocaleString()} <span class="${beliColor}">(${pctBeli}%)</span></p>
+                                    <p class="text-[8px] text-amber-200/70 font-bold border-t border-gray-700 pt-1">L.Bln: Rp ${Math.round(dMonthlyLimitHpp).toLocaleString()}</p>
+                                </div>
+                                <div class="text-right border-l border-gray-700/50 pl-3">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Stok Aktual</p>
+                                    <p class="text-sm text-fuchsia-400 font-bold break-words">Rp ${Math.round(dStock).toLocaleString()}</p>
+                                    <p class="text-[9px] text-gray-500 font-bold mt-1">Sesuai Inputan</p>
+                                </div>
+                            </div>
+                        </div>`;
                     });
                 }
                 dC.innerHTML = cardsHTML;
@@ -1987,57 +2197,6 @@
                 }
             }
 
-            // APPLE-TO-APPLE LOGIC FOR DIREKTORI COMPARISONS
-            let isCurrentHasMaster = fD_raw.some(d => d.tanggal === 0);
-            let maxCurrentTgl = 31;
-            if (!isCurrentHasMaster) {
-                let currentDailies = fD_raw.filter(d => d.tanggal > 0);
-                if (currentDailies.length > 0) maxCurrentTgl = Math.max(...currentDailies.map(d => d.tanggal));
-            }
-            let appleLabelDir = (!isCurrentHasMaster && maxCurrentTgl < 31) ? ` (s/d Tgl ${maxCurrentTgl})` : '';
-
-            function aggregatePastAppleToApple(pastRawQuery) {
-                if (isCurrentHasMaster) return pastRawQuery;
-                
-                let forceDailiesQuery = [];
-                if (pastRawQuery === pPD) {
-                    if (bF === "") { 
-                        forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && d.tahun === tFN - 1 && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
-                    } else { 
-                        let bFA = bF.split(',').map(Number);
-                        if (bFA.length === 1) { 
-                            let m = bFA[0]; let pM = m === 1 ? 12 : m - 1; let pY = m === 1 ? tFN - 1 : tFN; 
-                            forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && parseInt(d.bulan) === pM && d.tahun === pY && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
-                        } else {
-                            forceDailiesQuery = pastRawQuery; 
-                        }
-                    }
-                } else if (pastRawQuery === pYD) {
-                    let bFA = bF !== "" ? bF.split(',').map(Number) : [1,2,3,4,5,6,7,8,9,10,11,12];
-                    forceDailiesQuery = window.data.filter(d => window.isOutletMatch(d.outlet, oF) && (dF === "" || d.dept === dF) && bFA.includes(parseInt(d.bulan)) && d.tahun === tFN - 1 && (divF === "" || window.getDivisi(d.dept) === divF) && d.tanggal > 0 && d.tanggal <= maxCurrentTgl);
-                }
-
-                if (forceDailiesQuery.length === 0) return pastRawQuery; 
-
-                let groups = {};
-                forceDailiesQuery.forEach(d => {
-                    let k = `${d.outlet}_${d.dept}_${d.bulan}_${d.tahun}`;
-                    if (!groups[k]) groups[k] = [];
-                    groups[k].push(d);
-                });
-                
-                let result = [];
-                Object.values(groups).forEach(dailies => {
-                    let combined = { ...dailies[0], target: 0, tProfit: 0, tPembelian: 0, omset: 0, profit: 0, pembelian: 0 };
-                    dailies.forEach(dx => { combined.target+=dx.target||0; combined.omset+=dx.omset||0; combined.tProfit+=dx.tProfit||0; combined.profit+=dx.profit||0; combined.tPembelian+=dx.tPembelian||0; combined.pembelian+=dx.pembelian||0; });
-                    result.push(combined);
-                });
-                return result;
-            }
-
-            pPD = aggregatePastAppleToApple(pPD);
-            pYD = aggregatePastAppleToApple(pYD);
-
             let qDt = { 1:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 2:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 3:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 4:{to:0,o:0,tp:0,p:0,tpem:0,pem:0} };
             let sDt = { 1:{to:0,o:0,tp:0,p:0,tpem:0,pem:0}, 2:{to:0,o:0,tp:0,p:0,tpem:0,pem:0} };
             let yTO = 0, yTP = 0;
@@ -2117,25 +2276,17 @@
                 if (sOTL > 0) py1 = isPj ? sOTL : (sOTL - sOPTL);
                 if (sOPTL > 0) py2 = isPj ? sOPTL : pYPm;
                 
-                let totalDays = 0;
-                let monthGroups = {};
-                fD_raw.forEach(d => {
-                    let mk = `${d.tahun}-${d.bulan}`;
-                    if (!monthGroups[mk]) monthGroups[mk] = { hasMaster: false, maxDay: 0 };
-                    if (d.tanggal === 0) monthGroups[mk].hasMaster = true;
-                    if (d.tanggal > monthGroups[mk].maxDay) monthGroups[mk].maxDay = d.tanggal;
-                });
-                Object.keys(monthGroups).forEach(mk => {
-                    let [y, m] = mk.split('-').map(Number);
-                    if (monthGroups[mk].hasMaster) totalDays += new Date(y, m, 0).getDate();
-                    else totalDays += monthGroups[mk].maxDay || 1;
-                });
-                let dTD = totalDays > 0 ? totalDays : 1;
+                let activeDays = new Set(); let hasT0 = false; let months = new Set();
+                fD.forEach(d => { if(d.tanggal > 0) activeDays.add(`${d.tahun}-${d.bulan}-${d.tanggal}`); else hasT0 = true; months.add(`${d.tahun}-${d.bulan}`); });
+                let dTD = 0; 
+                if (activeDays.size > 0) { dTD = activeDays.size; } 
+                else if (hasT0) { months.forEach(ym => { let [y, m] = ym.split('-'); dTD += new Date(parseInt(y), parseInt(m), 0).getDate(); }); }
+                if (dTD === 0) dTD = 1;
 
                 let dRH = tHpp / dTD; let dDsi = dRH > 0 ? (dTS / dRH).toFixed(2) : '0.00';
 
-                let cH = `<div class="glass p-5 rounded-2xl border-t-4 border-sky-500 bg-gray-900/50 shadow-xl ${sSB ? '' : 'md:col-span-2 lg:col-span-1'}"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-history text-sky-500"></i> Vs ${pL}${appleLabelDir}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, pr1, pr1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, pr2, pr2>0)}</div></div></div>`;
-                if (sSB) { cH += `<div class="glass p-5 rounded-2xl border-t-4 border-purple-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)${appleLabelDir}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, py1, py1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, py2, py2>0)}</div></div></div>`; }
+                let cH = `<div class="glass p-5 rounded-2xl border-t-4 border-sky-500 bg-gray-900/50 shadow-xl ${sSB ? '' : 'md:col-span-2 lg:col-span-1'}"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-history text-sky-500"></i> Vs ${pL}</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, pr1, pr1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(pr2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, pr2, pr2>0)}</div></div></div>`;
+                if (sSB) { cH += `<div class="glass p-5 rounded-2xl border-t-4 border-purple-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2"><i class="fas fa-calendar-alt text-purple-500"></i> Vs Tahun Lalu (YoY)</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i1}"></i> ${l1}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py1).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a1, py1, py1>0)}</div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1"><i class="fas ${i2}"></i> ${l2}</p><p class="text-xs text-gray-500 font-semibold">Ref: Rp ${Math.round(py2).toLocaleString()}</p></div><div class="text-right flex items-center gap-2">${getGrowthBadge(a2, py2, py2>0)}</div></div></div>`; }
                 cH += `<div class="glass p-5 rounded-2xl border-t-4 border-teal-500 bg-gray-900/50 shadow-xl"><div class="flex justify-between items-center border-b border-gray-700/80 pb-3 mb-4"><h4 class="font-black text-white text-base flex items-center gap-2" title="Days Sales of Inventory (DSI)"><i class="fas fa-boxes text-teal-500"></i> Umur Perputaran</h4></div><div class="flex justify-between items-center mb-4"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1">Total Stok</p><p class="text-sm text-gray-300 font-bold">Rp ${Math.round(dTS).toLocaleString()}</p></div><div class="text-right flex items-center gap-2"><h3 class="text-2xl font-black text-teal-400 leading-none">${dDsi} Hr</h3></div></div><div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase font-bold flex items-center gap-2 mb-1">HPP Periode</p><p class="text-xs text-gray-500 font-semibold">Rp ${Math.round(tHpp).toLocaleString()}</p></div><div class="text-right flex items-center gap-2"><p class="text-sm font-bold text-gray-400">${dTD} Hari</p></div></div></div>`;
                 cC.innerHTML = cH;
             }
@@ -2291,14 +2442,8 @@
                         const sDB = `<span class="ml-2 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-gray-700/80 text-gray-300 border border-gray-600">${window.getDivisi(d.originalDept)}</span>`;
                         let dPR = pR.filter(r => r.dept === d.originalDept); 
                         
-                        let rawDeptData = fD_raw.filter(r => r.dept === d.originalDept && r.bulan === i);
-                        let dHasMaster = rawDeptData.some(r => r.tanggal === 0);
-                        let dMaxTgl = 1;
-                        if (!dHasMaster) {
-                            let dDailies = rawDeptData.filter(r => r.tanggal > 0);
-                            if (dDailies.length > 0) dMaxTgl = Math.max(...dDailies.map(x => x.tanggal));
-                        }
-                        let dAD = dHasMaster ? new Date(tFN, i, 0).getDate() : dMaxTgl;
+                        let dActD = new Set(); let dHT0 = false; dPR.forEach(r => { if(r.tanggal > 0) dActD.add(r.tanggal); else dHT0 = true; });
+                        let dAD = dActD.size > 0 ? dActD.size : (dHT0 ? fDIM : 1);
                         
                         let dHp = d.omset - d.profit; let dRH = dHp / dAD; let dDsi = dRH > 0 ? (d.cS / dRH).toFixed(2) : '0.00';
                         
